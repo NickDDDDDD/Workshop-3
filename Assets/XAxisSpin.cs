@@ -5,7 +5,12 @@ using UnityEngine;
 
 public class XAxisSpin : MonoBehaviour
 {
+    public enum CubeType {I, A, B, C, D }
+    public CubeType cubeType;
+    private Vector3 initPosA = new Vector3(2.0f, 0.0f, 0.0f);
     [SerializeField] private float spinSpeed;
+    [SerializeField] private float moveSpeed = 5.0f;
+    [SerializeField] private float moveRange = 3.0f;
 
     // Update() is called once *per frame*. It is called *after* the Start()
     // method, which is only called once when the component is enabled for the
@@ -18,8 +23,31 @@ public class XAxisSpin : MonoBehaviour
     // - https://docs.unity3d.com/Manual/ExecutionOrder.html
     private void Update()
     {
-        var angle = this.spinSpeed * Time.deltaTime;
+        
+
+        switch (cubeType)
+        {
+            case CubeType.I:
+                SpinInXAxis();
+                break;
+            case CubeType.A:
+                MoveInZAxis();
+                break;    
+        }
+    }
+
+
+    private void SpinInXAxis()
+    {
+        var angle = this.spinSpeed * Time.time;
         var axis = new Vector3(1.0f, 0.0f, 0.0f);
-        transform.localRotation *= Quaternion.AngleAxis(angle, axis);
+        
+        transform.localRotation = Quaternion.AngleAxis(angle, axis);
+    }
+
+    private void MoveInZAxis(){
+
+       float zPosition = Mathf.Sin(Time.time * moveSpeed) * moveRange;
+       transform.position = new Vector3(initPosA.x, initPosA.y, zPosition);
     }
 }
